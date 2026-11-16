@@ -33,12 +33,21 @@ def erro(msg, como=""):
 
 def run(*cmd, **kw):
     try:
-        return subprocess.run(list(cmd), capture_output=True, text=True, timeout=30, **kw)
+        return subprocess.run(list(cmd), capture_output=True, text=True, encoding="utf-8", errors="replace",
+                              timeout=30, **kw)
     except (OSError, subprocess.TimeoutExpired) as e:
         return subprocess.CompletedProcess(cmd, 1, "", str(e))
 
 
+def _mesmo_caminho(cmd, path):
+    # No Windows o instalador grava o caminho com "/", então compara ignorando o tipo de barra.
+    return path.replace("\\", "/").lower() in cmd.replace("\\", "/").lower() if os.name == "nt" else path in cmd
+
+
 def main():
+    # No Windows a saída em pipe é cp1252, que não tem os emojis abaixo.
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--lado", required=True, choices=["sdd", "nosdd"])
     p.add_argument("--repo", required=True, help="pasta do repo de implementação")
@@ -121,10 +130,10 @@ def main():
         except ValueError:
             erro("%s não é um JSON válido" % settings)
     mine = [c for c in cmds if "hook_registrar.py" in c]
-    instalar = "python3 scripts/instalar_hook.py --lado %s --repo %s" % (args.lado, args.repo)
+    instalar = ("python" if os.name == "nt" else "python3") + " scripts/instalar_hook.py --lado %s --repo %s" % (args.lado, args.repo)
     if not mine:
         erro("hook do /registrar não instalado", instalar)
-    elif not any(HOOK in c and "--lado %s" % args.lado in c for c in mine):
+    elif not any(_mesmo_caminho(c, HOOK) and "--lado %s" % args.lado in c for c in mine):
         erro("hook instalado aponta para outro workspace ou lado: %s" % mine[0], instalar)
     else:
         ok("hook do /registrar instalado (lado %s)" % args.lado)
