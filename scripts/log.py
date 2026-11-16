@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Registra uma task concluída em data/<lado>.csv, com tokens e tempo tirados do transcript.
 
+Se a mesma sessão já tiver sido registrada antes (ex.: spec e depois implement na mesma sessão),
+só conta o que aconteceu depois do registro anterior.
+
 Exemplo:
   python3 scripts/log.py --lado sdd --task T01 --fase implement --ultima ../share-screen-sdd \\
       --resultado ok_primeira --retrabalhos 0 --notas "subiu de primeira"
@@ -9,6 +12,7 @@ import argparse
 import csv
 import os
 import sys
+from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import tokens  # noqa: E402
@@ -17,15 +21,73 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FIELDS = [
     "lado", "task", "fase", "data", "sessoes", "modelo",
     "input_tokens", "cache_write_tokens", "cache_read_tokens", "output_tokens", "total_tokens",
-    "duracao_min", "prompts", "resultado", "retrabalhos", "notas",
+    "duracao_min", "prompts", "resultado", "retrabalhos", "notas", "ate",
 ]
+LADOS = ["sdd", "nosdd"]
 FASES = ["spec", "plan", "tasks", "implement", "fix"]
 RESULTADOS = ["ok_primeira", "ok_com_ajustes", "falhou"]
 
 
+def csv_path(lado):
+    return os.path.join(ROOT, "data", lado + ".csv")
+
+
+def _parse_iso(s):
+    try:
+        return datetime.fromisoformat(s.replace("Z", "+00:00"))
+    except (AttributeError, ValueError):
+        return None
+
+
+def previous_cutoffs(lado, session_ids):
+    """Para cada sessão, o instante do último registro que a incluiu."""
+    path = csv_path(lado)
+    cut = {}
+    if not os.path.exists(path):
+        return cut
+    with open(path, encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            ate = _parse_iso(r.get("ate") or "")
+            if not ate:
+                continue
+            for sid in (r.get("sessoes") or "").split(";"):
+                if sid in session_ids and (sid not in cut or ate > cut[sid]):
+                    cut[sid] = ate
+    return cut
+
+
+def registrar(lado, task, fase, session_ids, resultado, retrabalhos=0, notas="", duracao=None, dry_run=False):
+    if lado not in LADOS:
+        raise ValueError("lado inválido: %s (use %s)" % (lado, ", ".join(LADOS)))
+    if fase not in FASES:
+        raise ValueError("fase inválida: %s (use %s)" % (fase, ", ".join(FASES)))
+    if resultado not in RESULTADOS:
+        raise ValueError("resultado inválido: %s (use %s)" % (resultado, ", ".join(RESULTADOS)))
+
+    agora = datetime.now(timezone.utc)
+    s = tokens.summarize(session_ids, since=previous_cutoffs(lado, session_ids))
+    if duracao is not None:
+        s["duracao_min"] = duracao
+
+    row = dict(s, lado=lado, task=task.upper(), fase=fase, resultado=resultado,
+               retrabalhos=retrabalhos, notas=notas, ate=agora.isoformat(timespec="seconds"))
+    row = {k: row.get(k, "") for k in FIELDS}
+    if dry_run:
+        return row
+
+    path = csv_path(lado)
+    new = not os.path.exists(path) or os.path.getsize(path) == 0
+    with open(path, "a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=FIELDS)
+        if new:
+            w.writeheader()
+        w.writerow(row)
+    return row
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--lado", required=True, choices=["sdd", "nosdd"])
+    p.add_argument("--lado", required=True, choices=LADOS)
     p.add_argument("--task", required=True, help="ID do tasks.md, ex.: T01")
     p.add_argument("--fase", required=True, choices=FASES)
     tokens.add_session_args(p)
@@ -36,29 +98,11 @@ def main():
     p.add_argument("--dry-run", action="store_true", help="mostra a linha sem gravar")
     args = p.parse_args()
 
-    session_ids = tokens.resolve_sessions(args)
-    s = tokens.summarize(session_ids)
-    if args.duracao is not None:
-        s["duracao_min"] = args.duracao
-
-    row = dict(s, lado=args.lado, task=args.task.upper(), fase=args.fase,
-               resultado=args.resultado, retrabalhos=args.retrabalhos, notas=args.notas)
-    row = {k: row.get(k, "") for k in FIELDS}
-
+    row = registrar(args.lado, args.task, args.fase, tokens.resolve_sessions(args), args.resultado,
+                    args.retrabalhos, args.notas, args.duracao, args.dry_run)
     for k in FIELDS:
         print("%-19s %s" % (k, row[k]))
-    if args.dry_run:
-        print("\n(dry-run: nada gravado)")
-        return
-
-    path = os.path.join(ROOT, "data", args.lado + ".csv")
-    new = not os.path.exists(path) or os.path.getsize(path) == 0
-    with open(path, "a", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=FIELDS)
-        if new:
-            w.writeheader()
-        w.writerow(row)
-    print("\nGravado em %s" % os.path.relpath(path, os.getcwd()))
+    print("\n(dry-run: nada gravado)" if args.dry_run else "\nGravado em %s" % os.path.relpath(csv_path(args.lado)))
 
 
 if __name__ == "__main__":

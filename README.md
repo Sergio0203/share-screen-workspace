@@ -17,6 +17,8 @@ data/nosdd.csv      registros do lado sem SDD (só o Perion edita)
 scripts/tokens.py   lê os transcripts do Claude Code e soma tokens/tempo/prompts de uma sessão
 scripts/log.py      registra uma linha no CSV (tokens e tempo vêm automáticos do transcript)
 scripts/report.py   gera reports/comparativo.md com o comparativo dos dois lados
+scripts/hook_registrar.py  hook do Claude Code que atende o /registrar no chat
+scripts/instalar_hook.py   instala esse hook no repo de implementação
 ```
 
 Só precisa de Python 3.9+, sem dependências.
@@ -27,14 +29,51 @@ Para a comparação ser justa:
 
 1. **Mesmo backlog.** As tasks saem do `tasks.md`, com os mesmos IDs e critérios de aceite nos dois lados.
 2. **Mesmo modelo e esforço.** Combinem modelo e nível de esforço e não troquem no meio.
-3. **Uma task por sessão** sempre que possível. Se uma task precisar de várias sessões, registre todas (`--sessao` aceita várias).
+3. **Registre cada fase/task na sessão em que ela aconteceu.** Pode ter várias na mesma sessão (ex.: spec e depois implement): cada registro conta só o que veio depois do anterior.
 4. **Tudo que gasta token conta.** No lado SDD, escrever spec, plano e quebra de tasks também é registrado (fases `spec`, `plan`, `tasks`).
 5. **Registre logo ao terminar a task**, enquanto lembra quantas correções foram necessárias.
-6. **Bugs descobertos depois** voltam para a task original: rode o `log.py` de novo com fase `fix` e o mesmo ID.
+6. **Bugs descobertos depois** voltam para a task original: registre de novo com fase `fix` e o mesmo ID.
+7. **Nada de métricas dentro do repo de implementação.** O Claude que implementa não deve saber que está sendo medido: nada disso vai em prompts, specs ou constituição.
 
 ## Como registrar
 
-Ao terminar uma task, a partir da raiz deste repo:
+### Pelo chat do Claude Code (recomendado)
+
+Instale o hook uma vez, na sua máquina, a partir da raiz deste repo:
+
+```bash
+python3 scripts/instalar_hook.py --lado sdd --repo ../share-screen-sdd      # Sergio
+python3 scripts/instalar_hook.py --lado nosdd --repo ../share-screen-nosdd  # Perion
+```
+
+Ele grava em `.claude/settings.local.json` do repo de implementação, que é pessoal e não vai pro git.
+Abra (ou reabra) a sessão do Claude Code nesse repo. Se o app pedir para aprovar o hook, aprove.
+
+Ao terminar uma task, digite no próprio chat da sessão:
+
+```
+/registrar <task> <fase> <resultado> [retrabalhos] [notas]
+```
+
+```
+/registrar GERAL spec ok
+/registrar T01 implement ok
+/registrar T02 implement ajustes 2 o seletor de tela não abria no Safari
+/registrar T02 fix ok bug de áudio achado depois
+```
+
+- `fase`: `spec`, `plan`, `tasks`, `implement` ou `fix`
+- `resultado`: `ok` (de primeira), `ajustes` ou `falhou`
+- `retrabalhos`: quantas vezes pediu correção ao Claude (padrão 0)
+
+O hook intercepta a mensagem **antes** de ela chegar ao Claude, então o registro não gasta tokens
+e o modelo não fica sabendo. Ele mede a sessão, grava em `data/<lado>.csv`, faz commit e push
+deste workspace e mostra o resumo no chat. Se o app recusar `/registrar` como comando desconhecido,
+use `registrar: T01 implement ok`, que funciona igual.
+
+### Pelo terminal
+
+Se preferir, ou para registrar uma sessão antiga, a partir da raiz deste repo:
 
 ```bash
 # pega automaticamente a sessão mais recente do Claude Code feita dentro do repo indicado
@@ -76,6 +115,7 @@ python3 scripts/tokens.py --ultima ../share-screen-sdd
 | `resultado` | manual | `ok_primeira`: aceite cumprido sem correção; `ok_com_ajustes`: precisou corrigir; `falhou`: não ficou pronta |
 | `retrabalhos` | manual | quantas vezes você teve que pedir correção de algo que o Claude entregou errado |
 | `notas` | manual | texto livre |
+| `ate` | auto | instante do registro; um próximo registro da mesma sessão só conta o que veio depois |
 
 Subagentes contam: os tokens deles entram na soma da sessão.
 

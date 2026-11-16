@@ -87,11 +87,20 @@ def _is_human_prompt(rec):
         return False
     content = (rec.get("message") or {}).get("content")
     if isinstance(content, str):
-        return not content.lstrip().startswith(("<command-", "<local-command"))
+        text = content.lstrip()
+        return not text.startswith(("<command-", "<local-command")) and not is_registro(text)
     if isinstance(content, list):
         kinds = {c.get("type") for c in content if isinstance(c, dict)}
-        return "tool_result" not in kinds and bool(kinds & {"text", "image"})
+        if "tool_result" in kinds or not kinds & {"text", "image"}:
+            return False
+        texts = [c.get("text", "") for c in content if isinstance(c, dict) and c.get("type") == "text"]
+        return not (texts and is_registro(texts[0].lstrip()))
     return False
+
+
+def is_registro(text):
+    """Mensagens /registrar são interceptadas pelo hook e não contam como prompt."""
+    return text.startswith(("/registrar", "registrar:"))
 
 
 def _active_minutes(timestamps):
@@ -103,7 +112,10 @@ def _active_minutes(timestamps):
     return total
 
 
-def summarize(session_ids):
+def summarize(session_ids, since=None):
+    """Soma as sessões. `since` = {session_id: datetime}: ignora o que veio até esse instante
+    (usado para não contar de novo o que já foi registrado em outra linha)."""
+    since = since or {}
     seen = set()
     totals = {"input_tokens": 0, "cache_write_tokens": 0, "cache_read_tokens": 0, "output_tokens": 0}
     models = set()
@@ -113,11 +125,14 @@ def summarize(session_ids):
 
     for sid in session_ids:
         main, subs = session_files(sid)
+        cutoff = since.get(sid)
         stamps = []
         for path in [main] + subs:
             is_main = path == main
             for rec in _read_jsonl(path):
                 t = _ts(rec)
+                if cutoff and (t is None or t <= cutoff):
+                    continue
                 if is_main and t:
                     stamps.append(t)
                 if is_main and _is_human_prompt(rec):
