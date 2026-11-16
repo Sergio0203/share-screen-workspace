@@ -8,9 +8,13 @@ com o Claude Code, e aqui guardamos as métricas de cada lado para comparar no f
 | `sdd`   | Sergio | `share-screen-sdd`   |
 | `nosdd` | Perion | `share-screen-nosdd` |
 
+**Primeira vez aqui?** Siga o [SETUP.md](SETUP.md) (ou abra o Claude Code nesta pasta e peça "faz o setup do lado nosdd").
+
 ## Estrutura
 
 ```
+SETUP.md            passo a passo de configuração da máquina
+CLAUDE.md           instruções para o Claude Code quando aberto neste repo
 tasks.md            backlog comum: as MESMAS tasks, com os mesmos IDs, nos dois lados
 data/sdd.csv        registros do lado SDD (só o Sergio edita)
 data/nosdd.csv      registros do lado sem SDD (só o Perion edita)
@@ -19,6 +23,7 @@ scripts/log.py      registra uma linha no CSV (tokens e tempo vêm automáticos 
 scripts/report.py   gera reports/comparativo.md com o comparativo dos dois lados
 scripts/hook_registrar.py  hook do Claude Code que atende o /registrar no chat
 scripts/instalar_hook.py   instala esse hook no repo de implementação
+scripts/verificar_setup.py confere se está tudo configurado
 ```
 
 Só precisa de Python 3.9+, sem dependências.
