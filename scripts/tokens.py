@@ -104,8 +104,8 @@ def _is_human_prompt(rec):
 
 
 def is_registro(text):
-    """Mensagens /registrar são interceptadas pelo hook e não contam como prompt."""
-    return text.startswith(("/registrar", "registrar:"))
+    """Não contam como prompt: /registrar (interceptado pelo hook) e o aviso de interrupção."""
+    return text.startswith(("/registrar", "registrar:", "[Request interrupted"))
 
 
 def _active_minutes(timestamps):
