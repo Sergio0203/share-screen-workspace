@@ -23,6 +23,10 @@ scripts/instalar_hook.py   instala esse hook no repo de implementação
 
 Só precisa de Python 3.9+, sem dependências.
 
+**No Windows**, troque `python3` por `python` (ou `py`) nos comandos deste README: lá o `python3` costuma ser
+o atalho da Microsoft Store, que não roda nada. O hook não depende disso, porque o instalador grava nele
+o caminho completo do Python que você usou para rodar o instalador.
+
 ## Regras do jogo
 
 Para a comparação ser justa:

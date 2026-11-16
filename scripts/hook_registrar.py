@@ -57,10 +57,20 @@ def parse(prompt):
 
 
 def git(root, *args):
-    return subprocess.run(["git", "-C", root] + list(args), capture_output=True, text=True, timeout=40)
+    return subprocess.run(["git", "-C", root] + list(args), capture_output=True, text=True,
+                          encoding="utf-8", errors="replace", timeout=40)
+
+
+def _utf8_stdio():
+    # O Claude Code troca JSON em UTF-8 com o hook. No Windows o padrão do Python em pipe é cp1252,
+    # o que corrompe acentos nas notas e quebra o registro com letras como "Á".
+    for stream in (sys.stdin, sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
 
 
 def main():
+    _utf8_stdio()
     ap = argparse.ArgumentParser()
     ap.add_argument("--lado", required=True)
     ap.add_argument("--sem-push", action="store_true")

@@ -18,9 +18,28 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 HOOK = os.path.join(HERE, "hook_registrar.py")
+WINDOWS = os.name == "nt"
+
+
+def _arg(path):
+    """Caminho pronto para a linha de comando do hook.
+
+    No Windows vai com barras normais e aspas duplas, que funcionam tanto no Git Bash quanto no cmd.
+    """
+    if WINDOWS:
+        return '"%s"' % path.replace("\\", "/")
+    return shlex.quote(path)
+
+
+def _python():
+    # No Windows, "python3" costuma ser o atalho da Microsoft Store, que não roda nada.
+    # Grava o caminho do Python que está rodando este instalador.
+    return _arg(sys.executable) if WINDOWS else "python3"
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--lado", required=True, choices=["sdd", "nosdd"])
     p.add_argument("--repo", required=True, help="pasta do repo de implementação")
@@ -41,7 +60,7 @@ def main():
     groups = [g for g in hooks.get("UserPromptSubmit", [])
               if not any("hook_registrar.py" in h.get("command", "") for h in g.get("hooks", []))]
     if not args.remover:
-        cmd = "python3 %s --lado %s" % (shlex.quote(HOOK), args.lado)
+        cmd = "%s %s --lado %s" % (_python(), _arg(HOOK), args.lado)
         groups.append({"hooks": [{"type": "command", "command": cmd, "timeout": 60}]})
     if groups:
         hooks["UserPromptSubmit"] = groups
