@@ -88,7 +88,12 @@ def _is_human_prompt(rec):
     content = (rec.get("message") or {}).get("content")
     if isinstance(content, str):
         text = content.lstrip()
-        return not text.startswith(("<command-", "<local-command")) and not is_registro(text)
+        if text.startswith("<local-command"):
+            return False  # saída de comando local (/model, /clear...), não é prompt
+        if "<command-name>" in text:  # skill ou comando digitado, ex.: /speckit-specify
+            name = text.split("<command-name>", 1)[1].split("</command-name>", 1)[0].strip()
+            return not is_registro(name)
+        return not is_registro(text)
     if isinstance(content, list):
         kinds = {c.get("type") for c in content if isinstance(c, dict)}
         if "tool_result" in kinds or not kinds & {"text", "image"}:
@@ -112,9 +117,12 @@ def _active_minutes(timestamps):
     return total
 
 
-def summarize(session_ids, since=None):
+def summarize(session_ids, since=None, until=None):
     """Soma as sessões. `since` = {session_id: datetime}: ignora o que veio até esse instante
-    (usado para não contar de novo o que já foi registrado em outra linha)."""
+    (usado para não contar de novo o que já foi registrado em outra linha). `until`: ignora o que veio depois.
+
+    O tempo ativo usa só mensagens de verdade (do usuário e do Claude), não registros internos
+    do Claude Code como fila, avisos de hook ou anexos."""
     since = since or {}
     seen = set()
     totals = {"input_tokens": 0, "cache_write_tokens": 0, "cache_read_tokens": 0, "output_tokens": 0}
@@ -133,7 +141,9 @@ def summarize(session_ids, since=None):
                 t = _ts(rec)
                 if cutoff and (t is None or t <= cutoff):
                     continue
-                if is_main and t:
+                if until and t and t > until:
+                    continue
+                if is_main and t and rec.get("type") in ("user", "assistant"):
                     stamps.append(t)
                 if is_main and _is_human_prompt(rec):
                     prompts += 1
@@ -151,6 +161,8 @@ def summarize(session_ids, since=None):
                 totals["output_tokens"] += usage.get("output_tokens") or 0
                 if msg.get("model") and msg["model"] != "<synthetic>":
                     models.add(msg["model"])
+        if stamps and until and sid == session_ids[-1]:
+            stamps.append(until)  # inclui revisar/testar até o registro (mesmo teto de pausa)
         if stamps:
             minutes += _active_minutes(stamps)
             first = min(stamps)

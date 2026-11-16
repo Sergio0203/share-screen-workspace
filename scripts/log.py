@@ -65,12 +65,12 @@ def registrar(lado, task, fase, session_ids, resultado, retrabalhos=0, notas="",
         raise ValueError("resultado inválido: %s (use %s)" % (resultado, ", ".join(RESULTADOS)))
 
     agora = datetime.now(timezone.utc)
-    s = tokens.summarize(session_ids, since=previous_cutoffs(lado, session_ids))
+    s = tokens.summarize(session_ids, since=previous_cutoffs(lado, session_ids), until=agora)
     if duracao is not None:
         s["duracao_min"] = duracao
 
     row = dict(s, lado=lado, task=task.upper(), fase=fase, resultado=resultado,
-               retrabalhos=retrabalhos, notas=notas, ate=agora.isoformat(timespec="seconds"))
+               retrabalhos=retrabalhos, notas=notas, ate=agora.isoformat(timespec="milliseconds"))
     row = {k: row.get(k, "") for k in FIELDS}
     if dry_run:
         return row
