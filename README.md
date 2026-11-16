@@ -78,7 +78,8 @@ use `registrar: T01 implement ok`, que funciona igual.
 
 ### Pelo terminal
 
-Se preferir, ou para registrar uma sessão antiga, a partir da raiz deste repo:
+Se preferir, ou para registrar uma sessão antiga, a partir da raiz deste repo.
+Esqueceu de registrar uma fase e já começou a próxima? Use `--ate` com a hora em que mandou o próximo comando: o registro conta só até ali, e o próximo `/registrar` conta a partir dali.
 
 ```bash
 # pega automaticamente a sessão mais recente do Claude Code feita dentro do repo indicado

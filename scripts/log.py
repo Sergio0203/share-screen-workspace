@@ -56,7 +56,8 @@ def previous_cutoffs(lado, session_ids):
     return cut
 
 
-def registrar(lado, task, fase, session_ids, resultado, retrabalhos=0, notas="", duracao=None, dry_run=False):
+def registrar(lado, task, fase, session_ids, resultado, retrabalhos=0, notas="", duracao=None, dry_run=False,
+              ate=None):
     if lado not in LADOS:
         raise ValueError("lado inválido: %s (use %s)" % (lado, ", ".join(LADOS)))
     if fase not in FASES:
@@ -64,7 +65,7 @@ def registrar(lado, task, fase, session_ids, resultado, retrabalhos=0, notas="",
     if resultado not in RESULTADOS:
         raise ValueError("resultado inválido: %s (use %s)" % (resultado, ", ".join(RESULTADOS)))
 
-    agora = datetime.now(timezone.utc)
+    agora = ate or datetime.now(timezone.utc)
     s = tokens.summarize(session_ids, since=previous_cutoffs(lado, session_ids), until=agora)
     if duracao is not None:
         s["duracao_min"] = duracao
@@ -95,11 +96,17 @@ def main():
     p.add_argument("--retrabalhos", type=int, default=0, help="pedidos de correção feitos ao Claude")
     p.add_argument("--duracao", type=float, help="sobrescreve o tempo ativo calculado (minutos)")
     p.add_argument("--notas", default="")
+    p.add_argument("--ate", help="registra só até este instante (ISO; sem fuso = horário local), "
+                                 "ex.: 2026-11-16T18:51:14. Para quem esqueceu de registrar uma fase")
     p.add_argument("--dry-run", action="store_true", help="mostra a linha sem gravar")
     args = p.parse_args()
+    ate = None
+    if args.ate:
+        ate = datetime.fromisoformat(args.ate.replace("Z", "+00:00"))
+        ate = (ate if ate.tzinfo else ate.astimezone()).astimezone(timezone.utc)
 
     row = registrar(args.lado, args.task, args.fase, tokens.resolve_sessions(args), args.resultado,
-                    args.retrabalhos, args.notas, args.duracao, args.dry_run)
+                    args.retrabalhos, args.notas, args.duracao, args.dry_run, ate)
     for k in FIELDS:
         print("%-19s %s" % (k, row[k]))
     print("\n(dry-run: nada gravado)" if args.dry_run else "\nGravado em %s" % os.path.relpath(csv_path(args.lado)))
