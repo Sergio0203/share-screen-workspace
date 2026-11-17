@@ -25,3 +25,5 @@ sdd,T06,spec,2026-11-17 03:23,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-5
 sdd,T06,plan,2026-11-17 03:30,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-5-5,10,16901,1951078,12747,1980736,4.6,1,ok_primeira,0,registrado por fora,2026-11-17T03:34:54.624+00:00
 sdd,T06,tasks,2026-11-17 03:36,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-5-5,8,12146,1509080,8025,1529259,1.9,1,ok_primeira,0,registrado por fora,2026-11-17T03:38:04.881+00:00
 sdd,T06,implement,2026-11-17 03:38,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-5-5,30,24579,7387361,16918,7428888,9.4,1,ok_primeira,0,testado por fora: resolução ok nas 3 qualidades e na troca; fps pedido ok (fps real não mensurável: tela falsa entrega 20 fps),2026-11-17T03:47:42.658+00:00
+sdd,T07,spec,2026-11-17 03:53,9e2ed7b7-f5e3-4b1e-bc4a-8066c20cda23,claude-opus-5-5,52,95694,1840517,36166,1972429,9.2,4,ok_primeira,0,"sessão nova; respostas mudaram requisitos: sem Enter, 8 s",2026-11-17T04:02:22.700+00:00
+sdd,T07,plan,2026-11-17 04:02,9e2ed7b7-f5e3-4b1e-bc4a-8066c20cda23,claude-opus-5-5,34,51767,2239455,23081,2314337,6.4,2,ok_primeira,0,inclui ajuste do limite de 100 caracteres,2026-11-17T04:08:47.408+00:00
