@@ -18,6 +18,9 @@ Combinado antes de começar:
   também vê a própria tela na aba do Telão. Quem já tinha feito essas tasks ajusta e registra como `fix`.
 - **2026-11-17 · T08:** deixa explícito o estilo "cursor chat" do Figma: o recado segue o cursor também enquanto a
   pessoa digita, e o movimento é contínuo para todos.
+- **2026-11-17 · T07 e T08:** o campo fica ativo enquanto o recado aparece, e o `Enter` não faz nada (antes: fechava
+  o campo). Com o recado na tela, `/` é só um caractere; um recado novo só começa depois que o anterior sumiu
+  (antes: o novo substituía o anterior). Se o cursor sai da imagem, o recado fica parado no último ponto.
 
 ## Tasks
 
@@ -79,7 +82,7 @@ compartilhamento, onde está o seu cursor. Para escrever, a pessoa precisa estar
 - [ ] Com a aba do Telão em foco e o cursor sobre o compartilhamento, apertar `/` abre um campo de texto na posição do cursor.
 - [ ] Quem está compartilhando também consegue escrever, desde que esteja na aba do Telão. Para isso, ela também vê a própria tela compartilhada na aba do Telão.
 - [ ] O recado aparece para todos **enquanto a pessoa digita**, ao vivo (atualiza em até 1 s). Não é preciso apertar `Enter`.
-- [ ] `Enter` só fecha o campo (o recado continua até o tempo de sumir). `Esc` fecha o campo e apaga o recado para todos na hora. Um campo fechado sem texto não mostra nada.
+- [ ] O campo continua ativo enquanto o recado está na tela (inclusive durante o fade): `Enter` não faz nada. `Esc` fecha o campo e apaga o recado para todos na hora. Um campo sem texto não mostra nada.
 - [ ] Apertar `/` enquanto digita em outro campo (ex.: o nome) não abre nada.
 - [ ] O texto tem no máximo 100 caracteres. O campo não deixa passar disso e mostra quantos caracteres faltam.
 - [ ] O recado aparece para **todos** na sala, **inclusive para quem está compartilhando**, com o nome de quem escreveu.
@@ -93,7 +96,8 @@ O recado funciona como o "cursor chat" do Figma: fica sempre em cima do cursor d
 - [ ] Desde a primeira letra, o recado fica preso ao cursor de quem escreve, **inclusive enquanto a pessoa ainda está digitando**: ela pode mover o mouse e o campo vai junto.
 - [ ] Para todos, o recado acompanha o movimento do cursor de quem escreveu de forma contínua (sem pular de posição em posição), enquanto estiver visível.
 - [ ] 8 s depois da última tecla, o recado some aos poucos, com um fade de 1 s. Se a pessoa voltar a digitar antes disso, a contagem recomeça.
-- [ ] Se a mesma pessoa mandar outro recado, o novo substitui o anterior.
+- [ ] Enquanto o recado da pessoa ainda está na tela, apertar `/` só escreve uma `/` no texto. Um recado novo só começa depois que o anterior sumiu por completo, então um recado nunca é substituído enquanto aparece.
+- [ ] Se o cursor sai de cima da imagem, o recado fica parado no último ponto e volta a seguir quando o cursor volta.
 - [ ] Recados de várias pessoas podem aparecer ao mesmo tempo, sem um apagar o outro.
 
 ### T09 · Janela flutuante para quem transmite
