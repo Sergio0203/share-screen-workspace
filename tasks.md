@@ -16,6 +16,8 @@ Combinado antes de começar:
 - **2026-11-17 · T07, T08 e T09:** o recado passa a aparecer **ao vivo enquanto a pessoa digita**, sem precisar de
   `Enter`, e some **8 s depois da última tecla** (antes: `Enter` enviava e sumia depois de 5 s). Quem compartilha
   também vê a própria tela na aba do Telão. Quem já tinha feito essas tasks ajusta e registra como `fix`.
+- **2026-11-17 · T08:** deixa explícito o estilo "cursor chat" do Figma: o recado segue o cursor também enquanto a
+  pessoa digita, e o movimento é contínuo para todos.
 
 ## Tasks
 
@@ -86,7 +88,10 @@ compartilhamento, onde está o seu cursor. Para escrever, a pessoa precisa estar
 
 ### T08 · O recado segue o cursor e some sozinho
 
-- [ ] Enquanto o recado está visível, ele acompanha o cursor de quem escreveu, para todos.
+O recado funciona como o "cursor chat" do Figma: fica sempre em cima do cursor de quem escreve.
+
+- [ ] Desde a primeira letra, o recado fica preso ao cursor de quem escreve, **inclusive enquanto a pessoa ainda está digitando**: ela pode mover o mouse e o campo vai junto.
+- [ ] Para todos, o recado acompanha o movimento do cursor de quem escreveu de forma contínua (sem pular de posição em posição), enquanto estiver visível.
 - [ ] 8 s depois da última tecla, o recado some aos poucos, com um fade de 1 s. Se a pessoa voltar a digitar antes disso, a contagem recomeça.
 - [ ] Se a mesma pessoa mandar outro recado, o novo substitui o anterior.
 - [ ] Recados de várias pessoas podem aparecer ao mesmo tempo, sem um apagar o outro.
