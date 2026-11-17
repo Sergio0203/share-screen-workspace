@@ -32,6 +32,7 @@ USO = ("Uso: /registrar <task> <fase> <resultado> [retrabalhos] [notas]\n"
 
 
 def block(msg):
+    sys.stdout.reconfigure(encoding="utf-8")  # no Windows o padrão é cp1252 e os acentos viram �
     print(json.dumps({"decision": "block", "reason": msg}, ensure_ascii=False))
     sys.exit(0)
 
@@ -67,7 +68,7 @@ def main():
     opts = ap.parse_args()
 
     try:
-        event = json.load(sys.stdin)
+        event = json.loads(sys.stdin.buffer.read().decode("utf-8"))  # no Windows o padrão é cp1252
     except Exception:
         sys.exit(0)
     prompt = (event.get("prompt") or "").lstrip()

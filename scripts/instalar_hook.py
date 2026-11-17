@@ -41,7 +41,8 @@ def main():
     groups = [g for g in hooks.get("UserPromptSubmit", [])
               if not any("hook_registrar.py" in h.get("command", "") for h in g.get("hooks", []))]
     if not args.remover:
-        cmd = "python3 %s --lado %s" % (shlex.quote(HOOK), args.lado)
+        py = sys.executable.replace(os.sep, "/")  # python3 pode ser o atalho da Store no Windows
+        cmd = "%s %s --lado %s" % (shlex.quote(py), shlex.quote(HOOK), args.lado)
         groups.append({"hooks": [{"type": "command", "command": cmd, "timeout": 60}]})
     if groups:
         hooks["UserPromptSubmit"] = groups
