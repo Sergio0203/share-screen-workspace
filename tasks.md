@@ -11,6 +11,12 @@ Combinado antes de começar:
 - **Esforço:** _(ex.: medium)_
 - **Stack:** _(definir: livre para cada lado ou igual para os dois?)_
 
+## Mudanças no backlog
+
+- **2026-11-17 · T07, T08 e T09:** o recado passa a aparecer **ao vivo enquanto a pessoa digita**, sem precisar de
+  `Enter`, e some **8 s depois da última tecla** (antes: `Enter` enviava e sumia depois de 5 s). Quem compartilha
+  também vê a própria tela na aba do Telão. Quem já tinha feito essas tasks ajusta e registra como `fix`.
+
 ## Tasks
 
 ### T01 · Criar uma sala
@@ -69,8 +75,10 @@ Qualquer participante, inclusive quem está compartilhando, pode escrever um rec
 compartilhamento, onde está o seu cursor. Para escrever, a pessoa precisa estar com a aba do Telão aberta e em foco.
 
 - [ ] Com a aba do Telão em foco e o cursor sobre o compartilhamento, apertar `/` abre um campo de texto na posição do cursor.
-- [ ] Quem está compartilhando também consegue escrever, desde que esteja na aba do Telão.
-- [ ] `Enter` envia, e `Esc` cancela sem enviar. Apertar `/` enquanto digita em outro campo (ex.: o nome) não abre nada.
+- [ ] Quem está compartilhando também consegue escrever, desde que esteja na aba do Telão. Para isso, ela também vê a própria tela compartilhada na aba do Telão.
+- [ ] O recado aparece para todos **enquanto a pessoa digita**, ao vivo (atualiza em até 1 s). Não é preciso apertar `Enter`.
+- [ ] `Enter` só fecha o campo (o recado continua até o tempo de sumir). `Esc` fecha o campo e apaga o recado para todos na hora. Um campo fechado sem texto não mostra nada.
+- [ ] Apertar `/` enquanto digita em outro campo (ex.: o nome) não abre nada.
 - [ ] O texto tem no máximo 100 caracteres. O campo não deixa passar disso e mostra quantos caracteres faltam.
 - [ ] O recado aparece para **todos** na sala, **inclusive para quem está compartilhando**, com o nome de quem escreveu.
 - [ ] O recado aparece no mesmo ponto da imagem para todo mundo, mesmo com janelas de tamanhos diferentes.
@@ -79,7 +87,7 @@ compartilhamento, onde está o seu cursor. Para escrever, a pessoa precisa estar
 ### T08 · O recado segue o cursor e some sozinho
 
 - [ ] Enquanto o recado está visível, ele acompanha o cursor de quem escreveu, para todos.
-- [ ] Depois de 5 s, o recado some aos poucos, com um fade de 1 s.
+- [ ] 8 s depois da última tecla, o recado some aos poucos, com um fade de 1 s. Se a pessoa voltar a digitar antes disso, a contagem recomeça.
 - [ ] Se a mesma pessoa mandar outro recado, o novo substitui o anterior.
 - [ ] Recados de várias pessoas podem aparecer ao mesmo tempo, sem um apagar o outro.
 
@@ -88,7 +96,7 @@ compartilhamento, onde está o seu cursor. Para escrever, a pessoa precisa estar
 Quem está compartilhando (ex.: jogando em outro app) precisa ver os recados sem voltar para a aba do Telão.
 
 - [ ] Durante o compartilhamento, quem transmite tem um botão para abrir uma janela flutuante que fica sempre por cima dos outros apps.
-- [ ] A janela mostra uma miniatura do próprio compartilhamento com os recados em cima, no mesmo ponto e com o mesmo comportamento de T07 e T08 (segue o cursor, some depois de 5 s).
+- [ ] A janela mostra uma miniatura do próprio compartilhamento com os recados em cima, no mesmo ponto e com o mesmo comportamento de T07 e T08 (aparece enquanto a pessoa digita, segue o cursor, some 8 s depois da última tecla).
 - [ ] A janela pode ser movida e redimensionada, e fechar a janela não para o compartilhamento.
 - [ ] Na janela flutuante só se lê os recados: escrever com `/` é só na aba do Telão.
 - [ ] Em navegadores sem suporte a janela flutuante, o botão não aparece, ou aparece desabilitado com uma explicação.
