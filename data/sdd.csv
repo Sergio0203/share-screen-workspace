@@ -14,3 +14,4 @@ sdd,T03,tasks,2026-11-16 23:07,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-
 sdd,T03,implement,2026-11-16 23:12,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-5-5,82,57506,6591109,34160,6682857,27.4,2,ok_primeira,0,"testado por fora (Chrome headless + mic falso, 15/15); 1 dúvida sobre servidor antigo, sem mudança de código",2026-11-17T00:02:44.048+00:00
 sdd,T04,spec,2026-11-17 00:04,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-5-5,16,22192,1262716,9594,1294518,2.8,2,ok_primeira,0,registrado por fora; mesma sessão da T03,2026-11-17T00:06:48.666+00:00
 sdd,T04,spec,2026-11-17 00:08,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-5-5,10,4247,904215,3398,911870,1.2,1,ok_primeira,0,ajuste do spec: adicionou ícone de câmera na lista (fora do tasks.md),2026-11-17T00:09:41.504+00:00
+sdd,T04,plan,2026-11-17 00:10,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-5-5,8,21612,699820,13637,735077,2.9,1,ok_primeira,0,registrado por fora,2026-11-17T00:13:41.549+00:00
