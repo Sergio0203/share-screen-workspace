@@ -19,3 +19,4 @@ sdd,T04,tasks,2026-11-17 00:14,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-
 sdd,T04,implement,2026-11-17 00:19,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-5-5,40,31467,5425137,24394,5481038,9.2,1,ok_primeira,0,"testado por fora (câmera falsa 13/13, permissão negada ok, regressão T02/T03 15/15)",2026-11-17T00:28:25.428+00:00
 sdd,T05,spec,2026-11-17 00:32,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-5-5,28,30761,3191733,18438,3240960,5.6,4,ok_primeira,0,registrado depois com --ate; mesma sessão da T03/T04,2026-11-17T00:38:34.100+00:00
 sdd,T05,plan,2026-11-17 00:38,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-5-5,8,20672,1014181,16885,1051746,2.9,1,ok_primeira,0,registrado por fora; corte logo após o fim (pausa longa depois),2026-11-17T00:41:30.000+00:00
+sdd,T05,tasks,2026-11-17 01:16,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-5-5,10,16769,1452768,11576,1481123,2.2,1,ok_primeira,0,registrado por fora,2026-11-17T01:18:39.098+00:00
