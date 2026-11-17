@@ -31,3 +31,4 @@ sdd,T07,tasks,2026-11-17 04:13,9e2ed7b7-f5e3-4b1e-bc4a-8066c20cda23,claude-opus-
 sdd,T07,implement,2026-11-17 04:16,9e2ed7b7-f5e3-4b1e-bc4a-8066c20cda23,claude-opus-5-5,68,70562,7530237,47679,7648546,19.1,1,ok_primeira,0,testado por fora 19/19; erro visto pelo usuário era servidor antigo (sem mudança de código),2026-11-17T04:36:56.883+00:00
 sdd,T08,spec,2026-11-17 04:40,aabd81ad-fbf8-468c-8292-eb93322447d3,claude-opus-5-5,16,47741,346327,10691,404775,2.6,2,ok_primeira,0,sessão nova; só specify (clarify à parte),2026-11-17T04:43:30.360+00:00
 sdd,T08,spec,2026-11-17 04:44,aabd81ad-fbf8-468c-8292-eb93322447d3,claude-opus-5-5,32,16623,796877,14144,827676,7.6,6,ok_primeira,0,clarify; respostas acrescentaram regras do / e do campo ativo,2026-11-17T04:51:41.788+00:00
+sdd,T08,plan,2026-11-17 04:54,aabd81ad-fbf8-468c-8292-eb93322447d3,claude-opus-5-5,24,54469,1290373,16723,1361589,3.5,1,ok_primeira,0,registrado por fora,2026-11-17T04:57:41.335+00:00
