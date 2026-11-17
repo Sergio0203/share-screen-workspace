@@ -29,3 +29,4 @@ sdd,T07,spec,2026-11-17 03:53,9e2ed7b7-f5e3-4b1e-bc4a-8066c20cda23,claude-opus-5
 sdd,T07,plan,2026-11-17 04:02,9e2ed7b7-f5e3-4b1e-bc4a-8066c20cda23,claude-opus-5-5,34,51767,2239455,23081,2314337,6.4,2,ok_primeira,0,inclui ajuste do limite de 100 caracteres,2026-11-17T04:08:47.408+00:00
 sdd,T07,tasks,2026-11-17 04:13,9e2ed7b7-f5e3-4b1e-bc4a-8066c20cda23,claude-opus-5-5,14,22065,1103665,14196,1139940,3.3,1,ok_primeira,0,registrado por fora,2026-11-17T04:16:27.856+00:00
 sdd,T07,implement,2026-11-17 04:16,9e2ed7b7-f5e3-4b1e-bc4a-8066c20cda23,claude-opus-5-5,68,70562,7530237,47679,7648546,19.1,1,ok_primeira,0,testado por fora 19/19; erro visto pelo usuário era servidor antigo (sem mudança de código),2026-11-17T04:36:56.883+00:00
+sdd,T08,spec,2026-11-17 04:40,aabd81ad-fbf8-468c-8292-eb93322447d3,claude-opus-5-5,16,47741,346327,10691,404775,2.6,2,ok_primeira,0,sessão nova; só specify (clarify à parte),2026-11-17T04:43:30.360+00:00
