@@ -11,3 +11,4 @@ sdd,T02,implement,2026-11-16 22:36,9e0578fe-99ea-4610-9bc2-7b0a2b228f94,claude-o
 sdd,T03,spec,2026-11-16 22:56,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-5-5,26,54002,667650,12669,734347,6.4,4,ok_primeira,0,registrado por fora; sessão nova,2026-11-16T23:03:02.499+00:00
 sdd,T03,plan,2026-11-16 23:03,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-5-5,20,40048,860830,18239,919137,3.9,1,ok_primeira,0,registrado por fora,2026-11-16T23:07:43.100+00:00
 sdd,T03,tasks,2026-11-16 23:07,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-5-5,14,22105,763646,13080,798845,3.8,1,ok_primeira,0,registrado por fora,2026-11-16T23:11:29.318+00:00
+sdd,T03,implement,2026-11-16 23:12,87d95938-bf18-4039-b319-7ffedcda55f9,claude-opus-5-5,82,57506,6591109,34160,6682857,27.4,2,ok_primeira,0,"testado por fora (Chrome headless + mic falso, 15/15); 1 dúvida sobre servidor antigo, sem mudança de código",2026-11-17T00:02:44.048+00:00
