@@ -10,6 +10,8 @@ Combinado antes de começar:
 - **Modelo:** _(ex.: claude-opus-5-5)_
 - **Esforço:** _(ex.: medium)_
 - **Stack:** _(definir: livre para cada lado ou igual para os dois?)_
+- **Servidor de mídia (a partir da T10):** os dois lados usam o **LiveKit** auto-hospedado (open source), com o
+  TURN embutido dele. Em desenvolvimento, cada um roda o LiveKit localmente; em produção, um só na VPS.
 
 ## Mudanças no backlog
 
@@ -21,6 +23,9 @@ Combinado antes de começar:
 - **2026-11-17 · T07 e T08:** o campo fica ativo enquanto o recado aparece, e o `Enter` não faz nada (antes: fechava
   o campo). Com o recado na tela, `/` é só um caractere; um recado novo só começa depois que o anterior sumiu
   (antes: o novo substituía o anterior). Se o cursor sai da imagem, o recado fica parado no último ponto.
+
+- **2026-11-17 · T10, T11 e T12 (novas):** a voz, a câmera e a tela passam por um servidor de mídia (LiveKit),
+  como no Discord, em vez de irem direto entre as pessoas. Os critérios de T03 a T09 continuam valendo.
 
 ## Tasks
 
@@ -109,6 +114,36 @@ Quem está compartilhando (ex.: jogando em outro app) precisa ver os recados sem
 - [ ] A janela pode ser movida e redimensionada, e fechar a janela não para o compartilhamento.
 - [ ] Na janela flutuante só se lê os recados: escrever com `/` é só na aba do Telão.
 - [ ] Em navegadores sem suporte a janela flutuante, o botão não aparece, ou aparece desabilitado com uma explicação.
+
+### T10 · Mídia passando por um servidor (modelo Discord)
+
+Hoje quem compartilha a tela manda uma cópia para cada pessoa, e o upload de casa engasga com a sala cheia.
+A voz, a câmera e a tela passam a ir para um servidor de mídia, que repassa para os outros.
+
+- [ ] Quem compartilha a tela envia **uma única** transmissão de tela, seja qual for o número de pessoas assistindo (dá para conferir nas estatísticas do navegador).
+- [ ] O mesmo vale para o microfone e a câmera: cada pessoa envia uma transmissão de cada, não uma por participante.
+- [ ] Todos os critérios de aceite de T03 a T09 continuam passando, com os mesmos tempos.
+- [ ] Sala cheia (6 pessoas) com a tela em 1080p 30 fps e as 6 câmeras ligadas funciona sem travar.
+- [ ] Ninguém de fora entra na mídia de uma sala: o acesso ao servidor de mídia só é liberado para quem entrou na sala pelo app, e vale só para aquela sala.
+- [ ] Se o servidor de mídia cair ou não responder, a pessoa vê uma mensagem clara, e a lista de participantes e os recados continuam funcionando.
+
+### T11 · Conectar em qualquer rede
+
+Hoje quem está no 4G ou numa rede de empresa às vezes entra na sala mas não ouve nem vê ninguém.
+
+- [ ] Uma pessoa numa rede que bloqueia UDP consegue ouvir, ver e compartilhar normalmente.
+- [ ] Uma pessoa numa rede que só libera a porta 443 (HTTPS) também consegue.
+- [ ] As credenciais de acesso ao relay expiram sozinhas (em no máximo 24 h) e não aparecem no código do site.
+- [ ] Se mesmo assim a mídia não conectar em até 15 s, a pessoa vê uma mensagem clara em vez de ficar em silêncio.
+
+### T12 · Qualidade adaptada a cada pessoa
+
+Quem tem internet fraca não deve estragar a transmissão de quem tem internet boa.
+
+- [ ] Uma pessoa com a internet limitada (ex.: 1 Mbps de download) continua vendo o compartilhamento, em qualidade menor, sem travar.
+- [ ] Enquanto isso, os outros continuam recebendo a qualidade escolhida por quem compartilha (T06).
+- [ ] Quando a internet da pessoa melhora, a qualidade dela volta a subir sozinha em até 15 s.
+- [ ] Quem está recebendo em qualidade reduzida vê um aviso discreto disso.
 
 ## Limitações conhecidas
 
