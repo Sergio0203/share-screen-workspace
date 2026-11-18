@@ -38,7 +38,9 @@ Para a comparação ser justa:
 4. **Tudo que gasta token conta.** No lado SDD, escrever spec, plano e quebra de tasks também é registrado (fases `spec`, `plan`, `tasks`).
 5. **Registre logo ao terminar a task**, enquanto lembra quantas correções foram necessárias.
 6. **Bugs descobertos depois** voltam para a task original: registre de novo com fase `fix` e o mesmo ID.
-7. **Nada de métricas dentro do repo de implementação.** O Claude que implementa não deve saber que está sendo medido: nada disso vai em prompts, specs ou constituição.
+7. **Trabalho fora do backlog** (algo que só um lado resolveu fazer) é registrado com um ID começando por `EXTRA-`
+   (ex.: `EXTRA-T09-VISUAL`). O comparativo lista à parte e não soma nos totais.
+8. **Nada de métricas dentro do repo de implementação.** O Claude que implementa não deve saber que está sendo medido: nada disso vai em prompts, specs ou constituição.
 
 ## Como registrar
 

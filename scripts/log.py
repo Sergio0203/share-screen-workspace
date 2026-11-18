@@ -67,8 +67,8 @@ def registrar(lado, task, fase, session_ids, resultado, retrabalhos=0, notas="",
 
     agora = ate or datetime.now(timezone.utc)
     cut = previous_cutoffs(lado, session_ids)
-    if desde:  # ignora o que veio antes (ex.: outra task na mesma sessão que não foi registrada)
-        cut = {sid: max(cut.get(sid, desde), desde) for sid in session_ids}
+    if desde:  # vale exatamente o informado (ex.: registrar depois uma task que veio antes na sessão)
+        cut = {sid: desde for sid in session_ids}
     s = tokens.summarize(session_ids, since=cut, until=agora)
     if duracao is not None:
         s["duracao_min"] = duracao

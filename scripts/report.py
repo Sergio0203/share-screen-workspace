@@ -28,6 +28,11 @@ def load(lado):
     return rows
 
 
+def is_extra(r):
+    """Trabalho fora do backlog (task EXTRA-...): fica fora da comparação."""
+    return r["task"].upper().startswith("EXTRA")
+
+
 def ssum(rows, k):
     return sum(r[k] for r in rows)
 
@@ -96,7 +101,9 @@ def stats(rows):
 
 
 def main():
-    data = {l: load(l) for l in LADOS}
+    todas = {l: load(l) for l in LADOS}
+    data = {l: [r for r in todas[l] if not is_extra(r)] for l in LADOS}
+    extras = {l: [r for r in todas[l] if is_extra(r)] for l in LADOS}
     s = {l: stats(data[l]) for l in LADOS}
     a, b = s["sdd"], s["nosdd"]
     out = []
@@ -105,7 +112,7 @@ def main():
     w("# Comparativo SDD vs. sem SDD")
     w("")
     w("_Gerado em %s a partir de `data/sdd.csv` (%d linhas) e `data/nosdd.csv` (%d linhas)._"
-      % (datetime.now().strftime("%Y-%m-%d %H:%M"), len(data["sdd"]), len(data["nosdd"])))
+      % (datetime.now().strftime("%Y-%m-%d %H:%M"), len(todas["sdd"]), len(todas["nosdd"])))
     w("")
     w("## Resumo")
     w("")
@@ -159,6 +166,20 @@ def main():
             x["fixes"] if x else "-", y["fixes"] if y else "-",
         ))
     w("")
+
+    if extras["sdd"] or extras["nosdd"]:
+        w("## Extras (fora do backlog)")
+        w("")
+        w("Trabalho que um lado fez por conta própria. Não entra em nenhum total acima.")
+        w("")
+        w("| Lado | Task | Tokens | Tempo | Notas |")
+        w("|---|---|---:|---:|---|")
+        for lado in LADOS:
+            for task, t in per_task(extras[lado]).items():
+                notas = "; ".join(r["notas"] for r in t["rows"] if r.get("notas"))
+                w("| %s | %s | %s | %s | %s |" % (lado, task, ktok(ssum(t["rows"], "total_tokens")),
+                                               hmin(ssum(t["rows"], "duracao_min")), notas))
+        w("")
 
     path = os.path.join(ROOT, "reports", "comparativo.md")
     with open(path, "w", encoding="utf-8") as f:
