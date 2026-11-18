@@ -57,7 +57,7 @@ def previous_cutoffs(lado, session_ids):
 
 
 def registrar(lado, task, fase, session_ids, resultado, retrabalhos=0, notas="", duracao=None, dry_run=False,
-              ate=None):
+              ate=None, desde=None):
     if lado not in LADOS:
         raise ValueError("lado inválido: %s (use %s)" % (lado, ", ".join(LADOS)))
     if fase not in FASES:
@@ -66,7 +66,10 @@ def registrar(lado, task, fase, session_ids, resultado, retrabalhos=0, notas="",
         raise ValueError("resultado inválido: %s (use %s)" % (resultado, ", ".join(RESULTADOS)))
 
     agora = ate or datetime.now(timezone.utc)
-    s = tokens.summarize(session_ids, since=previous_cutoffs(lado, session_ids), until=agora)
+    cut = previous_cutoffs(lado, session_ids)
+    if desde:  # ignora o que veio antes (ex.: outra task na mesma sessão que não foi registrada)
+        cut = {sid: max(cut.get(sid, desde), desde) for sid in session_ids}
+    s = tokens.summarize(session_ids, since=cut, until=agora)
     if duracao is not None:
         s["duracao_min"] = duracao
 
@@ -98,15 +101,20 @@ def main():
     p.add_argument("--notas", default="")
     p.add_argument("--ate", help="registra só até este instante (ISO; sem fuso = horário local), "
                                  "ex.: 2026-11-16T18:51:14. Para quem esqueceu de registrar uma fase")
+    p.add_argument("--desde", help="só conta a partir deste instante (ISO; sem fuso = horário local). "
+                                   "Para quando a sessão tem antes outra coisa que não foi registrada")
     p.add_argument("--dry-run", action="store_true", help="mostra a linha sem gravar")
     args = p.parse_args()
-    ate = None
-    if args.ate:
-        ate = datetime.fromisoformat(args.ate.replace("Z", "+00:00"))
-        ate = (ate if ate.tzinfo else ate.astimezone()).astimezone(timezone.utc)
+    def instante(v):
+        if not v:
+            return None
+        t = datetime.fromisoformat(v.replace("Z", "+00:00"))
+        return (t if t.tzinfo else t.astimezone()).astimezone(timezone.utc)
+
+    ate, desde = instante(args.ate), instante(args.desde)
 
     row = registrar(args.lado, args.task, args.fase, tokens.resolve_sessions(args), args.resultado,
-                    args.retrabalhos, args.notas, args.duracao, args.dry_run, ate)
+                    args.retrabalhos, args.notas, args.duracao, args.dry_run, ate, desde)
     for k in FIELDS:
         print("%-19s %s" % (k, row[k]))
     print("\n(dry-run: nada gravado)" if args.dry_run else "\nGravado em %s" % os.path.relpath(csv_path(args.lado)))

@@ -34,3 +34,8 @@ sdd,T08,spec,2026-11-17 04:44,aabd81ad-fbf8-468c-8292-eb93322447d3,claude-opus-5
 sdd,T08,plan,2026-11-17 04:54,aabd81ad-fbf8-468c-8292-eb93322447d3,claude-opus-5-5,24,54469,1290373,16723,1361589,3.5,1,ok_primeira,0,registrado por fora,2026-11-17T04:57:41.335+00:00
 sdd,T08,tasks,2026-11-17 04:58,aabd81ad-fbf8-468c-8292-eb93322447d3,claude-opus-5-5,16,30839,1115249,14656,1160760,2.7,1,ok_primeira,0,registrado por fora,2026-11-17T05:00:50.157+00:00
 sdd,T08,implement,2026-11-17 05:01,aabd81ad-fbf8-468c-8292-eb93322447d3,claude-opus-5-5,62,51821,6261447,33312,6346642,15.8,1,ok_primeira,0,aprovado pelo usuário em teste manual; sem regressão,2026-11-17T05:17:01.124+00:00
+sdd,T10,spec,2026-11-18 01:19,28c9b00a-542d-41df-bdbe-5e27d002b538,claude-opus-5-5,18,107769,735861,10323,853971,2.6,2,ok_primeira,0,"só specify; sessão também tem a T09 (melhorias visuais) e um specify abandonado antes, excluídos com --desde",2026-11-18T01:22:14.000+00:00
+sdd,T10,spec,2026-11-18 01:22,28c9b00a-542d-41df-bdbe-5e27d002b538,claude-opus-5-5,32,13193,1499147,7500,1519872,4.9,5,ok_primeira,0,clarify,2026-11-18T01:27:09.000+00:00
+sdd,T10,plan,2026-11-18 01:27,28c9b00a-542d-41df-bdbe-5e27d002b538,claude-opus-5-5,32,59659,2639557,29564,2728812,5.2,1,ok_primeira,0,registrado por fora,2026-11-18T01:32:24.000+00:00
+sdd,T10,tasks,2026-11-18 01:32,28c9b00a-542d-41df-bdbe-5e27d002b538,claude-opus-5-5,12,22649,1067504,13500,1103665,2.4,1,ok_primeira,0,registrado por fora,2026-11-18T01:34:48.000+00:00
+sdd,T10,implement,2026-11-18 01:34,28c9b00a-542d-41df-bdbe-5e27d002b538,claude-opus-5-5,210,172682,32685958,107537,32966387,44.0,2,ok_primeira,0,41/42; falta T041 (implantar em domínio público); 'tente dnv' foi só repetir um comando cortado; 318 testes ok,2026-11-18T02:45:46.572+00:00
